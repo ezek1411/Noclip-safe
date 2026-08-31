@@ -1,0 +1,23 @@
+name: Extract Source Zip
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unzip the mod source
+        run: unzip -o noclip-safe-source.zip -d .
+
+      - name: Commit extracted source
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Extract mod source from ZIP"
+          commit_user_name: "GitHub Actions"
+          commit_user_email: "actions@github.com"
