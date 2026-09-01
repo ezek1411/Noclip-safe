@@ -16,7 +16,7 @@ void SafeMode::setNoclip(bool on) {
 }
 
 bool SafeMode::isCheated() {
-    return false; // Renvoie toujours false, la tentative n'est jamais considérée comme trichée
+    return s_noclip || s_cheatedThisAttempt;
 }
 
 void SafeMode::onNewAttempt() {
