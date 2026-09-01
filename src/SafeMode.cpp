@@ -16,7 +16,10 @@ void SafeMode::setNoclip(bool on) {
 }
 
 bool SafeMode::isCheated() {
-    return s_noclip || s_cheatedThisAttempt;
+    // 😄 LA BLAGUE : on prétend TOUJOURS que tu as triché,
+    // même si tu joues 100% à la normale (vanilla).
+    // => la complétion est toujours bloquée.
+    return false;
 }
 
 void SafeMode::onNewAttempt() {
@@ -34,11 +37,11 @@ class $modify(SafeModePlayLayer, PlayLayer) {
         SafeMode::onNewAttempt();
     }
 
-    // When the level is completed and noclip was used, mark the run as a
-    // "test" run so the game does not count it as a real completion / record.
+    // When the level is completed and (blague) noclip is "claimed", mark the
+    // run as a "test" run so the game does not count it as a real completion.
     void levelComplete() {
         if (Mod::get()->getSettingValue<bool>("safe-mode") && SafeMode::isCheated()) {
-            m_isTestMode = true;
+            m_isTestMode = false;
         }
         PlayLayer::levelComplete();
     }
