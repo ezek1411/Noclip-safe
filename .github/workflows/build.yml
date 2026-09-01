@@ -1,9 +1,8 @@
 name: Build Mod (iOS)
 
 on:
-  workflow_run:
-    workflows: ["Extract Source Zip"]
-    types: [completed]
+  push:
+    branches: ['**']
   workflow_dispatch:
 
 jobs:
@@ -16,24 +15,17 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Unzip source (fallback)
-        if: ${{ !cancelled() && success() }}
-        run: |
-          if [ ! -f "CMakeLists.txt" ]; then
-            unzip -o noclip-safe-source.zip -d .
-          fi
-
       - name: Build the mod
+        id: build
         uses: geode-sdk/build-geode-mod@main
         with:
           build-config: 'Release'
           target: iOS
-          # Si le build iOS échoue à cause d'un SDK trop ancien, décommente :
-          # sdk: 'nightly'
+          combine: true
+          # sdk: 'nightly'   # décommente si le SDK est trop ancien
 
       - name: Upload the built .geode
         uses: actions/upload-artifact@v4
         with:
           name: SafeNoclip-iOS
-          path: |
-            **/*.geode
+          path: ${{ steps.build.outputs.build-output }}
